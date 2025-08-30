@@ -32,7 +32,7 @@ python3 scripts/poetry_install.py
 UnB server:
 
 ```sh
-/usr/bin/python3.12 scripts/poetry_install.py
+python3.11 scripts/poetry_install.py
 ```
 
 Para desinstalar:
@@ -49,7 +49,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 UnB server:
 
 ```sh
-curl -sSL https://install.python-poetry.org | /usr/bin/python3.12 -
+curl -sSL https://install.python-poetry.org | python3.11 -
 ```
 
 Adicione o Poetry ao seu **PATH**:
@@ -139,3 +139,9 @@ A interface estará disponível em:
   py scripts/poetry_install.py
   poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
   ```
+
+
+
+
+ssh -L 8001:localhost:8001 -p 13508 antoniovinicius@164.41.75.221
+
