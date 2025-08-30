@@ -29,11 +29,27 @@ git clone https://github.com/antonio-vmoura/prisma_rag.git && cd prisma_rag
 ```sh
 python3 scripts/poetry_install.py
 ```
+UnB server:
+
+```sh
+/usr/bin/python3.8 scripts/poetry_install.py
+```
+
+Para desinstalar:
+
+```sh
+    py scripts/poetry_install.py --uninstall
+```
 
 Alternativamente:
 
 ```sh
 curl -sSL https://install.python-poetry.org | python3 -
+```
+UnB server:
+
+```sh
+curl -sSL https://install.python-poetry.org | /usr/bin/python3.8 -
 ```
 
 Adicione o Poetry ao seu **PATH**:
@@ -47,6 +63,12 @@ Adicione o Poetry ao seu **PATH**:
 
   ```sh
   export PATH="$HOME/.local/bin:$PATH"
+  ```
+
+  UnB server:
+
+  ```sh
+  export PATH="/home/antoniovinicius/.local/bin:$PATH"
   ```
 
 ### 3. Instale as dependências
