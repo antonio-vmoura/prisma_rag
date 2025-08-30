@@ -32,7 +32,7 @@ python3 scripts/poetry_install.py
 UnB server:
 
 ```sh
-/usr/bin/python3.8 scripts/poetry_install.py
+/usr/bin/python3.12 scripts/poetry_install.py
 ```
 
 Para desinstalar:
@@ -49,7 +49,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 UnB server:
 
 ```sh
-curl -sSL https://install.python-poetry.org | /usr/bin/python3.8 -
+curl -sSL https://install.python-poetry.org | /usr/bin/python3.12 -
 ```
 
 Adicione o Poetry ao seu **PATH**:
@@ -69,6 +69,8 @@ Adicione o Poetry ao seu **PATH**:
 
   ```sh
   export PATH="/home/antoniovinicius/.local/bin:$PATH"
+
+  /home/antoniovinicius/.local/bin
   ```
 
 ### 3. Instale as dependências
