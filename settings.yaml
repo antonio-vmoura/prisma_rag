@@ -51,7 +51,7 @@ llm:
   prompt_style: "llama3"
   # Should be matching the selected model
   max_new_tokens: 512
-  context_window: 3900
+  # context_window: 3900
   # Select your tokenizer. Llama-index tokenizer is the default.
   # tokenizer: meta-llama/Meta-Llama-3.1-8B-Instruct
   temperature: 0.1      # The temperature of the model. Increasing the temperature will make the model answer more creatively. A value of 0.1 would be more factual. (Default: 0.1)
