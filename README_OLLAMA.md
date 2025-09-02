@@ -140,8 +140,6 @@ A interface estará disponível em:
   poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
   ```
 
-
-
+### Tunel
 
 ssh -L 8001:localhost:8001 -p 13508 antoniovinicius@164.41.75.221
-
