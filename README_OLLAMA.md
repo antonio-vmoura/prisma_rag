@@ -91,7 +91,7 @@ O PRISMA-RAG usa dois modelos principais:
 Baixe-os com:
 
 ```sh
-ollama pull llama3:8b
+ollama pull llama3.1:8b
 ollama pull nomic-embed-text
 ```
 
@@ -101,13 +101,19 @@ ollama pull nomic-embed-text
 
 ## ▶️ Execução
 
-### 1. Inicie o Ollama
+### 1. Baixe o Ollama
+
+```sh
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+### 2. Inicie o Ollama
 
 ```sh
 ollama serve
 ```
 
-### 2. Rode o PRISMA-RAG
+### 3. Rode o PRISMA-RAG
 
 ```sh
 PGPT_PROFILES=ollama poetry run python -m private_gpt
