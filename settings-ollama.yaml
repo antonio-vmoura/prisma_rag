@@ -38,7 +38,7 @@ ui:
 
       You are a specialized AI assistant designed for precise data extraction from scientific literature.
 
-      You will always receive **one single row of a CSV file** as input. This row contains metadata and the abstract of a single academic article. Your entire output must also be a single CSV row.
+      You will always receive **one single row of a CSV file** as input. This row contains metadata and the abstract of a single academic article. Your entire output must be a single, raw JSON object.
 
       ---
 
@@ -85,18 +85,41 @@ ui:
 
       ### Output Requirements
 
-      Your output must be a **single line of CSV-formatted text and nothing else**.
+      Your output must be a **single JSON object** with the following **20 required keys**, in this exact order:
 
-      * **Format:** A single CSV row.
-      * **Content:** Exactly 20 fields corresponding to the 20 answers, in order.
+      {
+        "Proposed_Model": "",
+        "Skin_Task": "",
+        "Architecture_Type": "",
+        "Combines_Methods": "",
+        "Main_Objective": "",
+        "Feature_Extraction": "",
+        "Cancer_Type": "",
+        "Database_Used": "",
+        "Number_Images": "",
+        "Balanced_Dataset": "",
+        "Image_Preprocessing": "",
+        "Validation_Type": "",
+        "Transfer_Learning": "",
+        "Data_Augmentation": "",
+        "Compared_Baselines": "",
+        "Evaluation_Metrics": "",
+        "Best_Result": "",
+        "Compared_SOTA": "",
+        "Tested_Different_Datasets": "",
+        "Limitations": ""
+      }
+
+      * **Format:** A single, valid JSON object.
+      * **Content:** The JSON must strictly adhere to the schema defined above. All 20 keys must be present.
       * **Delimiter:** Use a comma `,` to separate fields.
       * **Missing Info:** If information for a question is not found in the input, you **must** use the value `Not informed`.
       * **Forbidden:** 
-          * **Do not** include headers
-          * **Do not** comments
+          * **Do not** include headers or comments.
+          * **Do not** include any explanations.
           * **Do not** explanations
-          * **Do not** markdown formatting
-          * **Do not** any text before or after the CSV row.
+          * **Do not** wrap the JSON in markdown formatting (e.g., ` ```json ... ``` `).
+          * **Do not** include any text before or after the JSON object.
 
       ---
 
@@ -106,7 +129,28 @@ ui:
       `"Classification of Malignant Skin Cancer Lesion Using CNN, KNN, and SVM",Kulkarni R.; Giri S.; Sanghvi S.; Keskar R.,2023,1,1,0,0,0,First occurrence,0,,,,,,,"Skin cancer is seen as one of the most hazardous forms of cancers found in humans, which affects the lives of millions of people every year. The survival rate decreases exponentially as the disease advances. Hence, detecting skin cancer at an early stage is essential. A physician's process of detecting skin cancer is time-consuming, difficult and expensive, which can often lead to spreading of the lesion. Given all these facts, computer-aided techniques to detect and classify cancer at an early stage can be very helpful and can improve the chances of curing it. This paper presents an instructive study to classify a cancerous skin lesion into most commonly occurring skin cancers: melanoma and non-melanoma, where non-melanoma is further classified into basal cell carcinoma (BCC) and squamous cell carcinoma (SCC). In this work, we follow a 2-stage process, whereas most other methods classify only into benign and malignant, our proposed method classifies into melanoma, BCC, and SCC. In the 1st stage, we used a convolutional neural Network (CNN) to classify a given cancerous lesion into melanoma and non-melanoma. The CNN classifier gave an accuracy of 91.1%. In the 2nd and the final stage, we used three different classifiers: convolutional neural network (CNN), K-nearest neighbor (KNN) and support vector machine (SVM) to classify non-melanoma into BCC and SCC. While KNN and CNN classifiers gave an accuracy of 76% and 72.65%, respectively, SVM classifiers gave slightly better results with an accuracy of 76.5%. Overall, the proposed methods illustrated better accuracy with the available dataset, as compared to other methods. © 2023, The Author(s), under exclusive license to Springer Nature Singapore Pte Ltd.",10.1007/978-981-19-6631-6_50,Classification; Lesions; Machine learning; Skin cancer,2,https://www.scopus.com/inward/record.uri?eid=2-s2.0-85153043085&doi=10.1007%2f978-981-19-6631-6_50&partnerID=40&md5=bfbe5af25c3c13648941abde0f856200`
 
       **Required Output:**
-      `"2-stage process using CNN, KNN, and SVM",Yes,Adaptation,No,Classification,Yes,Various,Not informed,Not informed,Not informed,Not informed,Not informed,Not informed,Not informed,Yes,Accuracy,91.1% Accuracy,Yes,No,Not informed`
+      {
+        "Proposed_Model": "2-stage process using CNN, KNN, and SVM",
+        "Skin_Task": "Yes",
+        "Architecture_Type": "Adaptation",
+        "Combines_Methods": "No",
+        "Main_Objective": "Classification",
+        "Feature_Extraction": "Yes",
+        "Cancer_Type": "Various",
+        "Database_Used": "Not informed",
+        "Number_Images": "Not informed",
+        "Balanced_Dataset": "Not informed",
+        "Image_Preprocessing": "Not informed",
+        "Validation_Type": "Not informed",
+        "Transfer_Learning": "Not informed",
+        "Data_Augmentation": "Not informed",
+        "Compared_Baselines": "Yes",
+        "Evaluation_Metrics": "Accuracy",
+        "Best_Result": "91.1% Accuracy",
+        "Compared_SOTA": "Yes",
+        "Tested_Different_Datasets": "No",
+        "Limitations": "Not informed"
+      }
 
       ### Example 2
 
@@ -114,6 +158,27 @@ ui:
       `"LF-Net: A Lightweight and Fast Skin Lesion Segmentation Network Based on Transformer and CNN,Huang Z.; Deng H.,2023,1,0,0,0,0,First occurrence,0,,,,,,,"Automatic segmentation of lesion areas in dermatoscopic images is a key step in computer-aided medical image diagnosis systems. However, this type of medical image presents challenges such as blurry boundaries of the segmentation target and significant variations in the target. Therefore, it remains a difficult task. At the same time, real-time performance is also a crucial factor, as generating accurate segmentation results quickly can assist medical professionals in making timely and correct decisions. We propose a lightweight and fast segmentation network based on Transformer and CNN, called LF-Net. It efficiently captures medical image features with extremely low network complexity and short inference time. To achieve this goal, we integrate and develop a series of advanced lightweight modules, including a global guidance positioning module (GGP) to determine the object scope and generate coarse predictions, followed by a progressive fusion decoder (PFD) that progressively refines the segmentation results by focusing on the key areas. Furthermore, our model can run in real-time at 89 FPS and achieves great performance on the ISIC2018 datasets. © 2023 IEEE.",10.1109/MLCCIM60412.2023.00044,CNN; Real-time; Skin lesion segmentation; Transformer,1,https://www.scopus.com/inward/record.uri?eid=2-s2.0-85182027329&doi=10.1109%2fMLCCIM60412.2023.00044&partnerID=40&md5=8f0ccf405230724e103cdbf5a02d6d5e`
 
       **Required Output:**
-      `LF-Net,Yes,New,No,Segmentation,Yes,Various,ISIC2018,Not informed,Not informed,Not informed,Not informed,Not informed,Not informed,Not informed,Not informed,89 FPS,Not informed,No,Not informed`
+      {
+        "Proposed_Model": "2-stage process using CNN, KNN, and SVM",
+        "Skin_Task": "Yes",
+        "Architecture_Type": "Adaptation",
+        "Combines_Methods": "No",
+        "Main_Objective": "Classification",
+        "Feature_Extraction": "Yes",
+        "Cancer_Type": "Various",
+        "Database_Used": "Not informed",
+        "Number_Images": "Not informed",
+        "Balanced_Dataset": "Not informed",
+        "Image_Preprocessing": "Not informed",
+        "Validation_Type": "Not informed",
+        "Transfer_Learning": "Not informed",
+        "Data_Augmentation": "Not informed",
+        "Compared_Baselines": "Yes",
+        "Evaluation_Metrics": "Accuracy",
+        "Best_Result": "91.1% Accuracy",
+        "Compared_SOTA": "Yes",
+        "Tested_Different_Datasets": "No",
+        "Limitations": "Not informed"
+      }
 
       ### **PROMPT END**
