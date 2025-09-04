@@ -13,7 +13,7 @@ class RequestLLM:
         
         self._input_csv = f"{path}/sistematic_review/{file_name}.csv"
         self._output_csv = f"{path}/sistematic_review/response/{file_name}_output.csv"
-        self._batch_size = 2  # número de linhas antes de salvar no CSV
+        self._batch_size = 100  # número de linhas antes de salvar no CSV
 
     def read_csv_lines(self):
         """Lê todas as linhas do CSV de entrada, separando cabeçalho e conteúdo"""

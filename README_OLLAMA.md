@@ -150,4 +150,6 @@ A interface estará disponível em:
 
 ssh -L 8001:localhost:8001 -p 13508 antoniovinicius@164.41.75.221
 
-python3 create_csv.py test_systematic_review_10 --path "$(pwd)" --api_url "http://localhost:8001/"
+PGPT_PROFILES=ollama poetry run python -m private_gpt
+
+python3 create_csv.py 3_survey_systematic_review_02_09_2025 --path "$(pwd)" --api_url "http://localhost:8001/"
