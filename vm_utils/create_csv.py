@@ -13,7 +13,9 @@ class RequestLLM:
         
         self._input_csv = f"{path}/sistematic_review/{file_name}.csv"
         self._output_csv = f"{path}/sistematic_review/response/{file_name}_output.csv"
-        self._batch_size = 100  # número de linhas antes de salvar no CSV
+        self._error_file = f"{path}/sistematic_review/response/{file_name}_errors.jsonl"        
+        
+        self._batch_size = 50  # número de linhas antes de salvar no CSV
 
     def read_csv_lines(self):
         """Lê todas as linhas do CSV de entrada, separando cabeçalho e conteúdo"""
@@ -29,19 +31,29 @@ class RequestLLM:
         if not json_list:
             return
 
-        # Pegando as chaves do primeiro JSON para o header
-        fieldnames = list(json_list[0].keys())
+        valid_jsons = []
+        error_jsons = []
 
-        # Abrindo o CSV no modo append, usando aspas duplas
-        with open(self._output_csv, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-            
-            # Se arquivo está vazio, escreve o header
-            if f.tell() == 0:
-                writer.writeheader()
-            
-            for json_obj in json_list:
-                writer.writerow(json_obj)
+        # separa válidos dos inválidos
+        for js in json_list:
+            if "raw_response" in js:
+                error_jsons.append(js)
+            else:
+                valid_jsons.append(js)
+
+        if valid_jsons:
+            fieldnames = list(valid_jsons[0].keys())
+            with open(self._output_csv, 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+                if f.tell() == 0:
+                    writer.writeheader()
+                for json_obj in valid_jsons:
+                    writer.writerow(json_obj)
+
+        if error_jsons:
+            with open(self._error_file, "a", encoding="utf-8") as f:
+                for err in error_jsons:
+                    f.write(json.dumps(err, ensure_ascii=False) + "\n")
 
     def call_prisma_rag(self):
         prisma_rag = gradio_client.Client(self._api_url)
@@ -56,6 +68,12 @@ class RequestLLM:
         start_time = time.time()
 
         for i, row in enumerate(lines, start=1):
+            
+            # Ignora linhas vazias
+            if not row or all(cell.strip() == "" for cell in row):
+                print(f"Linha {i} ignorada (vazia).")
+                continue
+            
             input_row = ','.join(row)
             document_title = row[0]  # primeira coluna do CSV
             
@@ -77,7 +95,10 @@ class RequestLLM:
                         response = {"raw_response": response}
                 
                 # Adiciona o campo "Document Title" ao JSON
-                response["Document Title"] = document_title
+                if isinstance(response, dict):
+                    response["Document Title"] = document_title
+                else:
+                    response = {"raw_response": str(response), "Document Title": document_title}
                 
                 print(f"response {i} processado:\n\n{response}\n")
 
@@ -92,12 +113,15 @@ class RequestLLM:
 
             except requests.exceptions.RequestException as e:
                 print(f"Erro ao processar a linha {i}: {e}")
+                with open(self._error_file, "a", encoding="utf-8") as f:
+                    f.write(json.dumps({"error": str(e), "line": row}, ensure_ascii=False) + "\n")
 
         # Salva as linhas restantes que não completaram o batch
         if batch_responses:
             self.save_jsons_to_csv(batch_responses)
 
         print(f"Processamento concluído! Tempo total: {time.time() - start_time:.2f} segundos")
+        
         return all_responses
     
 if __name__ == "__main__":
