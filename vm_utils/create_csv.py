@@ -12,8 +12,8 @@ class RequestLLM:
         self._file_name = file_name
         
         self._input_csv = f"{path}/sistematic_review/{file_name}.csv"
-        self._output_csv = f"{path}/sistematic_review/response/{file_name}_output3.csv"
-        self._error_csv = f"{path}/sistematic_review/response/{file_name}_errors3.csv"        
+        self._output_csv = f"{path}/sistematic_review/response/{file_name}_output.csv"
+        self._error_csv = f"{path}/sistematic_review/response/{file_name}_errors.csv"        
         
         self._batch_size = 2  # número de linhas antes de salvar no CSV
 
@@ -126,6 +126,7 @@ class RequestLLM:
 if __name__ == "__main__":
     #python3 create_csv.py 3_survey_systematic_review_02_09_2025 --path "$(pwd)" --api_url "http://localhost:8001/"
     #python3 create_csv.py 3_survey_systematic_review_02_09_2025_errors --path "$(pwd)" --api_url "http://localhost:8001/"
+    #python3 create_csv.py test_systematic_review_1 --path "$(pwd)" --api_url "http://localhost:8001/"
     
     parser = argparse.ArgumentParser(description="Processa CSV com Prisma RAG e salva respostas em CSV.")
     parser.add_argument("file_name", type=str, help="Nome do arquivo CSV (sem extensão)")
