@@ -15,7 +15,7 @@ class RequestLLM:
         self._output_csv = f"{path}/sistematic_review/response/{file_name}_output.csv"
         self._error_csv = f"{path}/sistematic_review/response/{file_name}_errors.csv"        
         
-        self._batch_size = 2  # número de linhas antes de salvar no CSV
+        # self._batch_size = 5  # número de linhas antes de salvar no CSV
 
     def read_csv_lines(self):
         """Lê todas as linhas do CSV de entrada, separando cabeçalho e conteúdo"""
@@ -32,7 +32,30 @@ class RequestLLM:
             return
 
         # Assume que todos os JSONs aqui são válidos e bem-sucedidos
-        fieldnames = list(json_list[0].keys())
+        fieldnames = [
+            "Proposed_Model",
+            "Skin_Task",
+            "Architecture_Type",
+            "Combines_Methods",
+            "Main_Objective",
+            "Feature_Extraction",
+            "Cancer_Type",
+            "Database_Used",
+            "Number_Images",
+            "Balanced_Dataset",
+            "Image_Preprocessing",
+            "Validation_Type",
+            "Transfer_Learning",
+            "Data_Augmentation",
+            "Compared_Baselines",
+            "Evaluation_Metrics",
+            "Best_Result",
+            "Compared_SOTA",
+            "Tested_Different_Datasets",
+            "Limitations",
+            "Document Title"
+        ]
+        
         # Verifica se o arquivo já existe para decidir se escreve o cabeçalho
         file_exists = os.path.isfile(self._output_csv)
 
@@ -99,13 +122,17 @@ class RequestLLM:
                 response_json["Document Title"] = document_title
                 
                 all_responses.append(response_json)
-                batch_responses.append(response_json)
-
-                # A cada batch, salva no CSV e limpa o batch
-                if i % self._batch_size == 0:
+                batch_responses.append(response_json)                
+                    
+                try:
+                    # if i % self._batch_size == 0:
                     self.save_successful_rows_to_csv(batch_responses)
-                    batch_responses = []
                     print(f"{i} linhas processadas e salvas no CSV.")
+                except Exception as e:
+                    print(f"Um erro inesperado ocorreu na linha {i}: {e}. Salvando linha no arquivo de erros.")
+                    self.save_error_row_to_csv(header, row)
+                finally:
+                    batch_responses = []
 
             except requests.exceptions.RequestException as e:
                 print(f"Erro de conexão ao processar a linha {i}: {e}. Salvando linha no arquivo de erros.")
