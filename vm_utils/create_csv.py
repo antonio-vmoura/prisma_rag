@@ -37,27 +37,10 @@ class RequestLLM:
 
         # Assume que todos os JSONs aqui são válidos e bem-sucedidos
         fieldnames = [
-            "Proposed_Model",
-            "Skin_Task",
-            "Architecture_Type",
-            "Combines_Methods",
-            "Main_Objective",
-            "Feature_Extraction",
-            "Cancer_Type",
-            "Database_Used",
-            "Number_Images",
-            "Balanced_Dataset",
-            "Image_Preprocessing",
-            "Validation_Type",
-            "Transfer_Learning",
-            "Data_Augmentation",
-            "Compared_Baselines",
-            "Evaluation_Metrics",
-            "Best_Result",
-            "Compared_SOTA",
-            "Tested_Different_Datasets",
-            "Limitations",
-            "Document Title"
+            "Proposed_Model", "Skin_Task", "Architecture_Type", "Combines_Methods", "Main_Objective",
+            "Feature_Extraction", "Cancer_Type", "Database_Used", "Number_Images", "Balanced_Dataset",
+            "Image_Preprocessing", "Validation_Type", "Transfer_Learning", "Data_Augmentation", "Compared_Baselines", 
+            "Evaluation_Metrics", "Best_Result", "Compared_SOTA", "Tested_Different_Datasets", "Limitations", "Document Title"
         ]
         
         # Verifica se o arquivo já existe para decidir se escreve o cabeçalho
@@ -129,9 +112,8 @@ class RequestLLM:
                 batch_responses.append(response_json)                
                     
                 try:
-                    # if i % self._batch_size == 0:
                     self.save_successful_rows_to_csv(batch_responses)
-                    print(f"{i} linhas processadas e salvas no CSV.")
+                    print(f"{i} linhas processadas e salvas no CSV.\n")
                 except Exception as e:
                     print(f"Um erro ocorreu ao salvar a linha {i}: {e}. Salvando linha no arquivo de erros.")
                     self.save_error_row_to_csv(header, row)
@@ -144,7 +126,6 @@ class RequestLLM:
             except Exception as e:
                 print(f"Um erro inesperado ocorreu na linha {i}: {e}. Salvando linha no arquivo de erros.")
                 self.save_error_row_to_csv(header, row)
-
 
         # Salva as linhas restantes que não completaram o batch
         if batch_responses:
