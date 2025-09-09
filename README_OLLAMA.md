@@ -154,6 +154,10 @@ screen -S prisma_rag
 
 PGPT_PROFILES=ollama poetry run python -m private_gpt
 
-screen -S prisma_rag
+--------------
+
+ssh -L 8001:localhost:8001 -p 13508 antoniovinicius@164.41.75.221
+
+screen -S prisma_rag_script
 
 python3.11 create_csv.py 1_survey_systematic_review_02_09_2025_llama3370b --path "$(pwd)" --api_url "http://localhost:8001/"
