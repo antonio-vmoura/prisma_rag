@@ -13,7 +13,11 @@ class RequestLLM:
         
         self._input_csv = f"{path}/sistematic_review/{file_name}.csv"
         self._output_csv = f"{path}/sistematic_review/response/{file_name}_output.csv"
-        self._error_csv = f"{path}/sistematic_review/response/{file_name}_errors.csv"        
+        self._error_csv = f"{path}/sistematic_review/response/{file_name}_errors.csv"
+        
+        # Cria a pasta 'response' se não existir
+        os.makedirs(os.path.dirname(self._output_csv), exist_ok=True)
+        os.makedirs(os.path.dirname(self._error_csv), exist_ok=True)
         
         # self._batch_size = 5  # número de linhas antes de salvar no CSV
 
@@ -129,7 +133,7 @@ class RequestLLM:
                     self.save_successful_rows_to_csv(batch_responses)
                     print(f"{i} linhas processadas e salvas no CSV.")
                 except Exception as e:
-                    print(f"Um erro inesperado ocorreu na linha {i}: {e}. Salvando linha no arquivo de erros.")
+                    print(f"Um erro ocorreu ao salvar a linha {i}: {e}. Salvando linha no arquivo de erros.")
                     self.save_error_row_to_csv(header, row)
                 finally:
                     batch_responses = []
